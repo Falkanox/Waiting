@@ -9,7 +9,9 @@ import fr.falkanox.bingo.scoreboard.WaitingScoreboard;
 import fr.falkanox.bingo.states.GState;
 import fr.falkanox.bingo.teams.BlueTeam;
 import fr.falkanox.bingo.teams.RedTeam;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Bingo extends JavaPlugin {
@@ -20,8 +22,8 @@ public class Bingo extends JavaPlugin {
     private GState state;
 
     public JPerPlayerMethodBasedScoreboard scoreboard;
-    public JScoreboardTeam team;
-    public JScoreboardTeam team1;
+    public JScoreboardTeam jblueTeam;
+    public JScoreboardTeam jredTeam;
     public BlueTeam blueTeam;
     public RedTeam redTeam;
 
@@ -44,12 +46,12 @@ public class Bingo extends JavaPlugin {
 
         scoreboard = new JPerPlayerMethodBasedScoreboard();
 
-        team = scoreboard.createTeam("Bleue", "§bBleue ", ChatColor.AQUA);
-        blueTeam = new BlueTeam(team, scoreboard, this);
-        
+        jblueTeam = scoreboard.createTeam("Bleue", "§bBleue ", ChatColor.AQUA);
+        blueTeam = new BlueTeam(jblueTeam, scoreboard, this);
 
-        team1 = scoreboard.createTeam("Rouge", "§cRouge ", ChatColor.RED);
-        redTeam = new RedTeam(team1, scoreboard, this);
+
+        jredTeam = scoreboard.createTeam("Rouge", "§cRouge ", ChatColor.RED);
+        redTeam = new RedTeam(jredTeam, scoreboard, this);
 
     }
 
@@ -63,6 +65,24 @@ public class Bingo extends JavaPlugin {
 
     public boolean isState(GState state){
         return this.state == state;
+    }
+
+    public void addBasicScoreboard(Player p){
+
+        for(Player pls : Bukkit.getOnlinePlayers()){
+
+            if(!jblueTeam.isOnTeam(pls.getUniqueId()) && !jredTeam.isOnTeam(pls.getUniqueId())){
+
+                JPerPlayerMethodBasedScoreboard sc = new JPerPlayerMethodBasedScoreboard();
+
+                sc.addPlayer(pls);
+                sc.setTitle(p, "§6§lBINGO");
+                sc.setLines(p,"§c","§7Choisissez une équipe...","§e");
+
+            }
+
+        }
+
     }
 
 }
