@@ -26,19 +26,31 @@ public class BlueTeam {
     public void addToBlueTeam(UUID uuid, Player p) {
 
         if (uuid != null) {
-            //Bukkit.getOnlinePlayers().forEach(this::addToScoreboard);
 
-            if (!team.isOnTeam(uuid)) {
+            if (team.getEntities().size() < 4) {
 
-                if (team.getEntities().size() < 4) {
+                if (!team.isOnTeam(uuid) || !main.jredTeam.isOnTeam(uuid)) {
 
                     team.addPlayer(p);
                     addToScoreboard(p);
                     countDown();
-                }
+                    p.sendMessage(main.prefix + "Vous avez rejoint l'équipe §bbleue §eavec succès !");
 
-            } else addToScoreboard(p);
+                } else if(main.jredTeam.isOnTeam(uuid)){
+
+                    main.jredTeam.removePlayer(p);
+                    team.addPlayer(p);
+                    addToScoreboard(p);
+                    countDown();
+                    p.sendMessage(main.prefix + "Vous avez rejoint l'équipe §bbleue §eavec succès !");
+
+                } else p.sendMessage(main.prefix + "Vous êtes déjà dans cette équipe !");
+
+            } else p.sendMessage(main.error + "Cette équipe est au complet !");
+
+
         }
+
     }
 
     public void addToScoreboard(Player p) {
